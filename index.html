@@ -4,72 +4,42 @@
   <meta charset="utf-8" />
   <title>Web Dice Roller (Server RNG)</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-    body{font-family:system-ui,Arial;max-width:720px;margin:2rem auto;padding:0 1rem}
-    input{width:4rem}
-    button{padding:.45rem .65rem;margin-right:.5rem}
-    pre{background:#111;color:#eee;padding:1rem;border-radius:6px;white-space:pre-wrap}
-    header{display:flex;align-items:center;gap:1rem}
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
+  <main class="container">
     <h1>Web Dice Roller (Server RNG)</h1>
-  </header>
 
-  <div>
-    <label>Count: <input id="count" type="number" min="1" max="20" value="2"></label>
-    <label>Sides: <input id="sides" type="number" min="2" max="100" value="6"></label>
-  </div>
+    <section class="controls">
+      <label>Count:
+        <input id="count" type="number" min="1" max="20" value="2" />
+      </label>
+      <label>Sides:
+        <input id="sides" type="number" min="2" max="100" value="6" />
+      </label>
 
-  <div style="margin-top:.6rem">
-    <button id="wake">Wake Server</button>
-    <button id="roll">Roll</button>
-  </div>
+      <div class="buttons">
+        <button id="wake">Wake Server</button>
+        <button id="roll" autofocus>Roll</button> <!-- autofocus ensures Enter will trigger -->
+      </div>
+    </section>
 
-  <h3>Result</h3>
-  <pre id="out">Not rolled yet.</pre>
+    <section class="result">
+      <h2>Result</h2>
+      <div class="result-grid" id="resultGrid" aria-live="polite">
+        <!-- JS will populate read-only numeric inputs here -->
+      </div>
+      <div class="summary">
+        <label>Total: <input id="total" type="text" readonly class="right" /></label>
+      </div>
+    </section>
 
-  <h4>CORS demo</h4>
-  <p>To show a CORS failure: open this same file from a different origin (e.g., open the file locally as <code>file://</code> or serve it on localhost without adding the function's origin to CORS). The fetch will be blocked by the browser.</p>
+    <section class="instructions">
+      <h3>How to use</h3>
+      <p>Press <strong>Roll</strong> (or press Enter) to roll the dice. The result fields are read-only and show each die result. The total is summed for you.</p>
+    </section>
+  </main>
 
-  <script>
-    // <-- put your Function App host here (from your screenshot)
-    const API_HOST = 'https://dice-api-abhirekhaa-fsd9e8cge8c3e5gy.westus3-01.azurewebsites.net';
-    const API_BASE = API_HOST + '/api';
-
-    const out = document.getElementById('out');
-    const wakeBtn = document.getElementById('wake');
-    const rollBtn = document.getElementById('roll');
-
-    async function wake() {
-      out.textContent = 'Waking server...';
-      try {
-        const r = await fetch(API_BASE + '/ping');
-        const j = await r.json();
-        out.textContent = JSON.stringify(j, null, 2);
-      } catch (e) {
-        out.textContent = 'Wake error (likely CORS or network): ' + e.message;
-      }
-    }
-
-    async function roll() {
-      const count = Number(document.getElementById('count').value);
-      const sides = Number(document.getElementById('sides').value);
-      out.textContent = 'Rolling...';
-      try {
-        const r = await fetch(`${API_BASE}/roll?count=${count}&sides=${sides}`);
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        const data = await r.json();
-        out.textContent = JSON.stringify(data, null, 2);
-      } catch (e) {
-        out.textContent = 'CORS/Fetch error: ' + e.message;
-      }
-    }
-
-    wakeBtn.addEventListener('click', wake);
-    rollBtn.addEventListener('click', roll);
-    window.addEventListener('load', wake);
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
