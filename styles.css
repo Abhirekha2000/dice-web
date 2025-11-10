@@ -1,0 +1,11 @@
+:root { --max-width: 800px; --gap: 0.75rem; font-family: system-ui, Arial, sans-serif; }
+body { display:flex; justify-content:center; padding:2rem; }
+.container { max-width: var(--max-width); width:100%;}
+.controls label { margin-right: 1rem; }
+.buttons { margin-top: .5rem; }
+button { padding:.5rem .75rem; }
+.result-grid { display:flex; gap:.5rem; margin-top: .5rem; flex-wrap:wrap; }
+.result-grid input { width:4rem; padding:.4rem; text-align:right; border-radius:4px; border:1px solid #ccc; background:#fafafa; }
+.right { text-align:right; }
+.summary { margin-top:.6rem; }
+.instructions { margin-top:1rem; color:#333; }
